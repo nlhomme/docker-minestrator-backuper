@@ -65,8 +65,8 @@ Exemple:
 ```
 docker run -e sftpUsername=jackbauer \
     -e sftpPassword=alligator3 \
-    -e sftp=coucoupouetpouet.minestrator.com \
-    -e transfertSpeedLimit=<100000 \
+    -e sftpServer=coucoupouetpouet.minestrator.com \
+    -e transfertSpeedLimit=100000 \
     --rm \
     -v /home/jackbauer/sauvegardes:/output \
     -t \
