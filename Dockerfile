@@ -1,11 +1,12 @@
 ##
 # NAME             : nlhomme/docker-minestrator-backuper
 # TO_BUILD         : docker build --rm -t nlhomme/docker-minestrator-backuper:latest .
-# TO_RUN           : docker run -e minestratorUsername=<SFTP_USERNAME> -e minestratorPassword=<SFTP_PASSWORD> -e minestratorServer=<SFTP_SERVER> -e transfertSpeedLimit=<KILOBIT_SPEED> --rm -v <HOST_PATH>:/output -t -i nlhomme/docker-minestrator-backuper:latest
+# TO_PUSH          : docker push nlhomme/docker-minestrator-backuper:latest
+# TO_RUN           : docker run -e sftpUsername=<SFTP_USERNAME> -e sftpPassword=<SFTP_PASSWORD> -e sftp=<SFTP_SERVER> -e transfertSpeedLimit=<KILOBIT_SPEED> --rm -v <HOST_PATH>:/output -t -i nlhomme/docker-minestrator-backuper:latest
 ##
 
 FROM alpine:latest
-#MAINTAINER nlhomme (https://github.com/nlhomme/minestratror-backuper)
+MAINTAINER nlhomme <heir-lychee0p@icloud.com>
 
 # Installing needed tools
 RUN apk add openssh sshpass tar 
