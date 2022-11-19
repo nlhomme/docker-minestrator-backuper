@@ -19,7 +19,10 @@ Pour faire fonctionner minestrator-backuper, il vous faut:
     * Le nom d'utilisateur du SFTP
     * Le mot de passe du SFTP
 
-⚠️ Podman n'est actuellement pas supporté à cause d'un bug lié aux montages de volumes hôte. Toute issue à ce sujet sera close sans discussion.
+⚠️⚠️⚠️ </p>
+Podman n'est actuellement pas supporté à cause d'une problématique liée au montage de volumes hôte ([plus d'infos](https://github.com/containers/podman/discussions/13537)). Cela reste néanmoins possible mais ce point ne sera pas traité ici. </p>
+Toute issue à ce sujet sera donc clôturée sans discussion. </p>
+⚠️⚠️⚠️ </p>
 
 ## Fonctionnement
 Le conteneur docker exécute à son démarrage un script qui va:
