@@ -1,7 +1,7 @@
 ##
 # NAME             : nlhomme/docker-minestrator-backuper
-# TO_BUILD         : docker build --rm -t nlhomme/docker-minestrator-backuper:latest .
-# TO_PUSH          : docker push nlhomme/docker-minestrator-backuper:latest
+# TO_BUILD         : docker build --rm -t nlhomme/docker-minestrator-backuper .
+# TO_TAG           : docker tag nlhomme/docker-minestrator-backuper:YYYYMMDD
 # TO_RUN           : docker run -e sftpUsername=<SFTP_USERNAME> -e sftpPassword=<SFTP_PASSWORD> -e sftp=<SFTP_SERVER> -e transfertSpeedLimit=<KILOBIT_SPEED> --rm -v <HOST_PATH>:/output -t -i nlhomme/docker-minestrator-backuper:latest
 ##
 
