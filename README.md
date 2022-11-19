@@ -1,6 +1,8 @@
 # docker-minestratror-backuper
 Sauvegarder votre serveur Mincraft hébergé chez Minestrator très facilement avec Docker.
 
+[![nlhomme](https://circleci.com/github/nlhomme/docker-minestrator-backuper.svg?style=svg)](https://app.circleci.com/pipelines/github/nlhomme/docker-minestratror-backuper)
+
 ## Avertissements
 
 Je ne travaille pas ni à, ni pour Minestrator.</p>
