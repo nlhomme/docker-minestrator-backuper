@@ -5,7 +5,7 @@ on:
     types:
       - closed
     branches:    
-      - 'omolade-ci'
+      - 'main'
 
 env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
