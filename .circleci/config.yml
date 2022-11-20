@@ -12,4 +12,4 @@ workflows:
           image: nlhomme/docker-minestrator-backuper
   build-docker-image-arm64:
     jobs:
-      - billschumacher/build-arm64-ecr-orb
+      - build-arm64-ecr-orb/build-and-deploy
