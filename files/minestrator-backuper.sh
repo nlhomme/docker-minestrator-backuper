@@ -16,3 +16,4 @@
 /usr/bin/tar zcfv output/"$(date +\%Y\%m\%d)""-minestrator.tar.gz" -C input .
 
 # END
+exit 0
