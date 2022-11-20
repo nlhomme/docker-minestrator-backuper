@@ -1,11 +1,49 @@
+#Source: https://namiops.medium.com/build-a-multi-arch-docker-image-with-circleci-for-amd64-arm64-risc64-3ad0537a1f28
 version: 2.1
-
-orbs:
-  docker: circleci/docker@2.1.4
-
+commands:
+  setup:
+    steps:
+      - checkout
+      - run:
+          name: Setup buildx and qemu
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y qemu-user-static
+            sudo apt-get install -y binfmt-support
+      - run:
+          name: Check versions
+          command: |
+            qemu-aarch64-static --version
+            update-binfmts --version 
+      - run:
+          name: Create builder
+          command: |
+            export DOCKER_CLI_EXPERIMENTAL=enabled
+            docker buildx create --name arm-builder
+            docker buildx use arm-builder
+            docker buildx inspect --bootstrap
+jobs:
+  build-amd64:
+    machine:
+      image: 'ubuntu-2004:current'
+    steps:
+      - setup
+      - run:
+          name: Build amd64 image
+          command: | 
+            DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --platform linux/amd64 .
+  build-arm64:
+    machine:
+      image: 'ubuntu-2004:current'
+    steps:
+      - setup
+      - run:
+          name: Build arm64 image
+          command: | 
+            DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --platform linux/arm64 --load -t arm-image .
 workflows:
-  build-docker-image-only:
+  version: 2
+  build:
     jobs:
-      - docker/publish:
-          deploy: false
-          image: nlhomme/docker-minestrator-backuper
+      - build-amd64
+      - build-arm64

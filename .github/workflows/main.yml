@@ -1,4 +1,4 @@
-name: 'Push to Docker Hub'
+name: 'Release'
 
 on:
   pull_request:
@@ -13,6 +13,16 @@ env:
   REPOSITORY_NAME: ${{ secrets.REPOSITORY_NAME}}
 
 jobs:
+  create-github-release:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: rymndhng/release-on-push-action@0.27.0
+        with:
+          bump_version_scheme: minor
+          use_github_release_notes: true
+
   build_and_push_to_registry:
     name: Build and push Docker image to Docker Hub
     if: github.event.pull_request.merged == true
@@ -31,8 +41,11 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d--%M-%S')"
 
-      - name: Build Docker Image
-        run: docker build . --file Dockerfile --tag $DOCKERHUB_USERNAME/$REPOSITORY_NAME:${{ steps.date.outputs.date }}
+      - name: Build Docker Image for x86_64
+        run: docker build . --file Dockerfile --platform x86_64 --tag $DOCKERHUB_USERNAME/$REPOSITORY_NAME:${{ steps.date.outputs.date }}
+
+      - name: Build Docker Image for arm64
+        run: docker build . --file Dockerfile --platform arm64 --tag $DOCKERHUB_USERNAME/$REPOSITORY_NAME:${{ steps.date.outputs.date }}
 
       - name: Push Docker Image to Docker Hub
         run: docker push $DOCKERHUB_USERNAME/$REPOSITORY_NAME:${{ steps.date.outputs.date }}
