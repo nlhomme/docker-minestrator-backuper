@@ -16,6 +16,8 @@ env:
 jobs:
   create-github-release:
     runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.release.outputs.version }}
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -52,11 +54,11 @@ jobs:
 
       - name: Build Docker Image for x86_64
         run: docker build . --file Dockerfile --platform x86_64
-          --tag $DOCKERHUB_USERNAME/$REPOSITORY_NAME:"${{ needs.create-github-release.outputs.version }}"
+          --tag $DOCKERHUB_USERNAME/$REPOSITORY_NAME:"${{ needs.create-github-release.outputs.output1 }}"
 
       - name: Build Docker Image for arm64
         run: docker build . --file Dockerfile --platform arm64
-          --tag $DOCKERHUB_USERNAME/$REPOSITORY_NAME:"${{ needs.create-github-release.outputs.version }}"
+          --tag $DOCKERHUB_USERNAME/$REPOSITORY_NAME:"${{ needs.create-github-release.outputs.output1 }}"
 
       - name: Push Docker Image to Docker Hub
-        run: docker push $DOCKERHUB_USERNAME/$REPOSITORY_NAME:"${{ needs.create-github-release.outputs.version }}"
+        run: docker push $DOCKERHUB_USERNAME/$REPOSITORY_NAME:"${{ needs.create-github-release.outputs.output1 }}"
