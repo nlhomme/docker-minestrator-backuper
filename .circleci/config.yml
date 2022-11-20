@@ -32,7 +32,7 @@ commands:
 
 jobs:
   execute-yamllint:
-    executor: yamllint/defaut
+    executor: yamllint/default
     steps:
       - checkout
       - yamllint/execute
