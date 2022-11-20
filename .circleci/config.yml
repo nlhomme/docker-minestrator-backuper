@@ -1,3 +1,4 @@
+#Source: https://namiops.medium.com/build-a-multi-arch-docker-image-with-circleci-for-amd64-arm64-risc64-3ad0537a1f28
 version: 2.1
 commands:
   setup:
@@ -22,18 +23,27 @@ commands:
             docker buildx use arm-builder
             docker buildx inspect --bootstrap
 jobs:
-  build:
+  build-amd64:
     machine:
       image: 'ubuntu-2004:current'
     steps:
       - setup
       - run:
-          name: Build ARM docker
+          name: Build amd64 image
           command: | 
-            DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --platform
-            linux/amd64,linux/arm64 --load -t arm-image .
+            DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --platform linux/amd64 .
+  build-arm64:
+    machine:
+      image: 'ubuntu-2004:current'
+    steps:
+      - setup
+      - run:
+          name: Build amd64 image
+          command: | 
+            DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --platform linux/arm64 --load -t arm-image .
 workflows:
   version: 2
   build:
     jobs:
-      - build
+      - build-amd64
+      - build-arm64
