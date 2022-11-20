@@ -52,11 +52,11 @@ jobs:
 
       - name: Build Docker Image for x86_64
         run: docker build . --file Dockerfile --platform x86_64
-          --tag $DOCKERHUB_USERNAME/$REPOSITORY_NAME:"${{ needs.create-github-release.outputs.output1 }}"
+          --tag $DOCKERHUB_USERNAME/$REPOSITORY_NAME:"${{ needs.create-github-release.outputs.version }}"
 
       - name: Build Docker Image for arm64
         run: docker build . --file Dockerfile --platform arm64
-          --tag $DOCKERHUB_USERNAME/$REPOSITORY_NAME:"${{ needs.create-github-release.outputs.output1 }}"
+          --tag $DOCKERHUB_USERNAME/$REPOSITORY_NAME:"${{ needs.create-github-release.outputs.version }}"
 
       - name: Push Docker Image to Docker Hub
-        run: docker push $DOCKERHUB_USERNAME/$REPOSITORY_NAME:"${{ needs.create-github-release.outputs.output1 }}"
+        run: docker push $DOCKERHUB_USERNAME/$REPOSITORY_NAME:"${{ needs.create-github-release.outputs.version }}"
