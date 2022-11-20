@@ -18,10 +18,19 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: rymndhng/release-on-push-action@v0.27.0
+      - id: release
+        uses: rymndhng/release-on-push-action@v0.27.0
         with:
           bump_version_scheme: minor
           use_github_release_notes: true
+          tag_prefix: "v"
+          release_name: "<RELEASE_VERSION>"
+
+    - name: Check Output Parameters
+            run: |
+              echo "Got tag name ${{ steps.release.outputs.tag_name }}"
+              echo "Got release version ${{ steps.release.outputs.version }}"
+
 
   build_and_push_to_registry:
     name: Build and push Docker image to Docker Hub
@@ -36,16 +45,12 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}          
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-            
-      - name: Get Current Date 
-        id: date
-        run: echo "name=date::$(date +'%Y-%m-%d--%M-%S')" >> $GITHUB_OUTPUT
 
       - name: Build Docker Image for x86_64
-        run: docker build . --file Dockerfile --platform x86_64 --tag $DOCKERHUB_USERNAME/$REPOSITORY_NAME:${{ steps.date.outputs.date }}
+        run: docker build . --file Dockerfile --platform x86_64 --tag $DOCKERHUB_USERNAME/$REPOSITORY_NAME:${{ steps.release.outputs.version }}
 
       - name: Build Docker Image for arm64
-        run: docker build . --file Dockerfile --platform arm64 --tag $DOCKERHUB_USERNAME/$REPOSITORY_NAME:${{ steps.date.outputs.date }}
+        run: docker build . --file Dockerfile --platform arm64 --tag $DOCKERHUB_USERNAME/$REPOSITORY_NAME:${{ steps.release.outputs.version }}
 
       - name: Push Docker Image to Docker Hub
-        run: docker push $DOCKERHUB_USERNAME/$REPOSITORY_NAME:${{ steps.date.outputs.date }}
+        run: docker push $DOCKERHUB_USERNAME/$REPOSITORY_NAME:${{ steps.release.outputs.version }}
