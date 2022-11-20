@@ -2,10 +2,14 @@ version: 2.1
 
 orbs:
   docker: circleci/docker@2.1.4
+  build-arm64-ecr-orb: billschumacher/build-arm64-ecr-orb@0.3.2
 
 workflows:
-  build-docker-image-only:
+  build-docker-image-x86:
     jobs:
       - docker/publish:
           deploy: false
           image: nlhomme/docker-minestrator-backuper
+  build-docker-image-arm64:
+    jobs:
+      - billschumacher/build-arm64-ecr-orb
