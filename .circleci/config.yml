@@ -1,5 +1,13 @@
-#Source: https://namiops.medium.com/build-a-multi-arch-docker-image-with-circleci-for-amd64-arm64-risc64-3ad0537a1f28
+# Source for multi arch build:
+# https://namiops.medium.com/build-a-multi-arch-docker-image-with-circleci-for-amd64-arm64-risc64-3ad0537a1f28
+---
 version: 2.1
+
+
+orbs:
+  yamllint: orbss/yamllint@0.0.3
+
+
 commands:
   setup:
     steps:
@@ -14,7 +22,7 @@ commands:
           name: Check versions
           command: |
             qemu-aarch64-static --version
-            update-binfmts --version 
+            update-binfmts --version
       - run:
           name: Create builder
           command: |
@@ -22,28 +30,42 @@ commands:
             docker buildx create --name arm-builder
             docker buildx use arm-builder
             docker buildx inspect --bootstrap
+
+
 jobs:
-  build-amd64:
+  execute-yamllint:
+    executor: yamllint/default
+    steps:
+      - checkout
+      - yamllint/execute
+
+  amd64-build:
     machine:
       image: 'ubuntu-2004:current'
     steps:
       - setup
       - run:
           name: Build amd64 image
-          command: | 
-            DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --platform linux/amd64 .
-  build-arm64:
+          command: |
+            DOCKER_CLI_EXPERIMENTAL=enabled
+              docker buildx build --platform linux/amd64 .
+
+  arm64-build:
     machine:
       image: 'ubuntu-2004:current'
     steps:
       - setup
       - run:
           name: Build arm64 image
-          command: | 
-            DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --platform linux/arm64 --load -t arm-image .
+          command: |
+            DOCKER_CLI_EXPERIMENTAL=enabled
+            docker buildx build --platform linux/arm64 --load -t arm-image .
+
+
 workflows:
   version: 2
   build:
     jobs:
-      - build-amd64
-      - build-arm64
+      - execute-yamllint
+      - amd64-build
+      - arm64-build
