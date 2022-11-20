@@ -1,5 +1,11 @@
 #Source: https://namiops.medium.com/build-a-multi-arch-docker-image-with-circleci-for-amd64-arm64-risc64-3ad0537a1f28
 version: 2.1
+
+
+orbs:
+  yamllint: orbss/yamllint@0.0.3
+
+
 commands:
   setup:
     steps:
@@ -22,7 +28,15 @@ commands:
             docker buildx create --name arm-builder
             docker buildx use arm-builder
             docker buildx inspect --bootstrap
+
+
 jobs:
+  execute-yamllint:
+    executor: yamllint/defaut
+    steps:
+      - checkout
+      - yamllint/execute
+
   build-amd64:
     machine:
       image: 'ubuntu-2004:current'
@@ -32,6 +46,7 @@ jobs:
           name: Build amd64 image
           command: | 
             DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --platform linux/amd64 .
+
   build-arm64:
     machine:
       image: 'ubuntu-2004:current'
@@ -41,9 +56,12 @@ jobs:
           name: Build arm64 image
           command: | 
             DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --platform linux/arm64 --load -t arm-image .
+
+
 workflows:
   version: 2
   build:
     jobs:
+      - execute-yamllint
       - build-amd64
       - build-arm64
