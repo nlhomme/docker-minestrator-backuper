@@ -32,7 +32,7 @@ jobs:
         run: |
           echo "Got tag name ${{ steps.release.outputs.tag_name }}"
           echo "Got release version ${{ steps.release.outputs.version }}"
-          echo "${{ steps.release.outputs.version }}" >> $GITHUB_OUTPUT
+          echo "RELEASE_NUMBER=${{ steps.release.outputs.version }}" >> $GITHUB_OUTPUT
 
 
   build_and_push_to_registry:
@@ -52,11 +52,11 @@ jobs:
 
       - name: Build Docker Image for x86_64
         run: docker build . --file Dockerfile --platform x86_64
-          --tag $DOCKERHUB_USERNAME/$REPOSITORY_NAME:${{needs.create-github-release.outputs.output1}}
+          --tag $DOCKERHUB_USERNAME/$REPOSITORY_NAME:${{ needs.create-github-release.outputs.RELEASE_NUMBER }}
 
       - name: Build Docker Image for arm64
         run: docker build . --file Dockerfile --platform arm64
-          --tag $DOCKERHUB_USERNAME/$REPOSITORY_NAME:${{needs.create-github-release.outputs.output1}}
+          --tag $DOCKERHUB_USERNAME/$REPOSITORY_NAME:${{ needs.create-github-release.outputs.RELEASE_NUMBER }}
 
       - name: Push Docker Image to Docker Hub
-        run: docker push $DOCKERHUB_USERNAME/$REPOSITORY_NAME:${{needs.create-github-release.outputs.output1}}
+        run: docker push $DOCKERHUB_USERNAME/$REPOSITORY_NAME:${{ needs.create-github-release.outputs.RELEASE_NUMBER }}
