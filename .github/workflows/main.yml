@@ -39,7 +39,7 @@ jobs:
             
       - name: Get Current Date 
         id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d--%M-%S')"
+        run: echo "name=date::$(date +'%Y-%m-%d--%M-%S')" >> $GITHUB_OUTPUT
 
       - name: Build Docker Image for x86_64
         run: docker build . --file Dockerfile --platform x86_64 --tag $DOCKERHUB_USERNAME/$REPOSITORY_NAME:${{ steps.date.outputs.date }}
