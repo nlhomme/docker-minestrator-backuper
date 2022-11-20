@@ -1,4 +1,6 @@
-#Source: https://namiops.medium.com/build-a-multi-arch-docker-image-with-circleci-for-amd64-arm64-risc64-3ad0537a1f28
+# Source for multi arch build:
+# https://namiops.medium.com/build-a-multi-arch-docker-image-with-circleci-for-amd64-arm64-risc64-3ad0537a1f28
+---
 version: 2.1
 
 
@@ -20,7 +22,7 @@ commands:
           name: Check versions
           command: |
             qemu-aarch64-static --version
-            update-binfmts --version 
+            update-binfmts --version
       - run:
           name: Create builder
           command: |
@@ -37,25 +39,27 @@ jobs:
       - checkout
       - yamllint/execute
 
-  build-amd64:
+  amd64-build:
     machine:
       image: 'ubuntu-2004:current'
     steps:
       - setup
       - run:
           name: Build amd64 image
-          command: | 
-            DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --platform linux/amd64 .
+          command: |
+            DOCKER_CLI_EXPERIMENTAL=enabled
+              docker buildx build --platform linux/amd64 .
 
-  build-arm64:
+  arm64-build:
     machine:
       image: 'ubuntu-2004:current'
     steps:
       - setup
       - run:
           name: Build arm64 image
-          command: | 
-            DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --platform linux/arm64 --load -t arm-image .
+          command: |
+            DOCKER_CLI_EXPERIMENTAL=enabled
+            docker buildx build --platform linux/arm64 --load -t arm-image .
 
 
 workflows:
@@ -63,5 +67,5 @@ workflows:
   build:
     jobs:
       - execute-yamllint
-      - build-amd64
-      - build-arm64
+      - amd64-build
+      - arm64-build
