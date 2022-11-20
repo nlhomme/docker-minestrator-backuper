@@ -26,10 +26,10 @@ jobs:
           tag_prefix: "v"
           release_name: "<RELEASE_VERSION>"
 
-    - name: Check Output Parameters
-            run: |
-              echo "Got tag name ${{ steps.release.outputs.tag_name }}"
-              echo "Got release version ${{ steps.release.outputs.version }}"
+      - name: Check Output Parameters
+        run: |
+          echo "Got tag name ${{ steps.release.outputs.tag_name }}"
+          echo "Got release version ${{ steps.release.outputs.version }}"
 
 
   build_and_push_to_registry:
