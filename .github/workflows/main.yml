@@ -52,13 +52,14 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build Docker Image for x86_64
-        run: docker build . --file Dockerfile --platform x86_64
-          --tag $DOCKERHUB_USERNAME/$REPOSITORY_NAME:"${{ needs.create-github-release.outputs.output1 }}"
+      - name: Install buildx
+        id: buildx
+        uses: crazy-max/ghaction-docker-buildx@v1
+        with:
+          version: latest
 
-      - name: Build Docker Image for arm64
-        run: docker build . --file Dockerfile --platform arm64
-          --tag $DOCKERHUB_USERNAME/$REPOSITORY_NAME:"${{ needs.create-github-release.outputs.output1 }}"
-
-      - name: Push Docker Image to Docker Hub
-        run: docker push $DOCKERHUB_USERNAME/$REPOSITORY_NAME:"${{ needs.create-github-release.outputs.output1 }}"
+      - name: Build and push docker image for amd64 and amd64
+        run: |
+          docker buildx build --push \
+            --tag $DOCKERHUB_USERNAME/$REPOSITORY_NAME:"${{ needs.create-github-release.outputs.output1 }}" \
+            --platform amd64,arm64 .
