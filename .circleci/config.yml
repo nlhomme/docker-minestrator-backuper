@@ -67,13 +67,10 @@ jobs:
     steps:
       - setup
       - run:
-          name: Build arm64 image
+          name: Build and run arm64 image
           command: |
             DOCKER_CLI_EXPERIMENTAL=enabled
             docker buildx build --platform linux/arm64 --load -t arm-image .
-      - run:
-          name: Run arm64 image
-          command: |
             docker run -e sftpUsername=sftpUsername -e sftpPassword=sftpPassword -e sftpServer=sftpServer -e transfertSpeedLimit=transfertSpeedLimit -e sftpInput=sftpInput --rm -v /tmp:/output --platform linux/arm64 -t -i nlhomme/docker-minestrator-backuper
 
 workflows:
