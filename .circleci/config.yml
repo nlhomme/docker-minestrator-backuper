@@ -52,14 +52,10 @@ jobs:
       - run:
           name: Run amd64 image
           command: |
-            docker run -e sftpUsername=$sftpUsername
-            -e sftpPassword=$sftpPassword
-            -e sftpServer=$sftpServer
-            -e transfertSpeedLimit=$transfertSpeedLimit
-            -e sftpInput=$sftpInput
-            --rm -v /tmp:/output
-            --platform linux/amd64
-            -t -i nlhomme/docker-minestrator-backuper:latest
+            TAG=0.1.$CIRCLE_BUILD_NUM
+            DOCKER_CLI_EXPERIMENTAL=enabled
+            docker buildx build --platform linux/amd64 --load -t arm-image .
+            docker run -e sftpUsername=sftpUsername -e sftpPassword=sftpPassword -e sftpServer=sftpServer -e transfertSpeedLimit=transfertSpeedLimit -e sftpInput=sftpInput --rm -v /tmp:/output --platform linux/amd64 -t -i nlhomme/docker-minestrator-backuper:$TAG
 
   arm64-build:
     machine:
