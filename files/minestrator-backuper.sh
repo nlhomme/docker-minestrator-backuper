@@ -27,4 +27,3 @@ fi
 /bin/ls -lh output/"$(date +\%Y\%m\%d)""-minestrator.tar.gz"
 
 # END
-exit 0
