@@ -74,7 +74,7 @@ jobs:
       - run:
           name: Run arm64 image
           command: |
-            docker run -e sftpUsername=sftpUsername -e sftpPassword=sftpPassword -e sftpServer=sftpServer -e transfertSpeedLimit=transfertSpeedLimit -e sftpInput=sftpInput --rm -v /tmp:/output --platform linux/arm64 -t -i nlhomme/docker-minestrator-backuper:latest
+            docker run -e sftpUsername=sftpUsername -e sftpPassword=sftpPassword -e sftpServer=sftpServer -e transfertSpeedLimit=transfertSpeedLimit -e sftpInput=sftpInput --rm -v /tmp:/output --platform linux/arm64 -t -i nlhomme/docker-minestrator-backuper
 
 workflows:
   version: 2
