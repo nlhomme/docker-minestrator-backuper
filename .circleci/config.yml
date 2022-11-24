@@ -49,6 +49,15 @@ jobs:
           command: |
             DOCKER_CLI_EXPERIMENTAL=enabled
               docker buildx build --platform linux/amd64 .
+      - run:
+          name: Run amd64 image
+          command: |
+            DOCKER_CLI_EXPERIMENTAL=enabled
+            docker buildx build --platform linux/amd64 --load -t amd64-image .
+      - run:
+          name: Run test for amd64 image
+          command: |
+            docker run -e sftpUsername=$sftpUsername -e sftpPassword=$sftpPassword -e sftpServer=$sftpServer -e transfertSpeedLimit=$transfertSpeedLimit -e sftpInput=$sftpInput --rm -v /tmp:/output --platform linux/amd64 -t -i amd64-image
 
   arm64-build:
     machine:
@@ -60,7 +69,10 @@ jobs:
           command: |
             DOCKER_CLI_EXPERIMENTAL=enabled
             docker buildx build --platform linux/arm64 --load -t arm-image .
-
+      - run:
+          name: Run test for arm64 image
+          command: |
+            docker run -e sftpUsername=$sftpUsername -e sftpPassword=$sftpPassword -e sftpServer=$sftpServer -e transfertSpeedLimit=$transfertSpeedLimit -e sftpInput=$sftpInput --rm -v /tmp:/output --platform linux/arm64 -t -i arm-image
 
 workflows:
   version: 2
