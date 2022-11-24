@@ -52,10 +52,9 @@ jobs:
       - run:
           name: Run amd64 image
           command: |
-            TAG=0.1.$CIRCLE_BUILD_NUM
             DOCKER_CLI_EXPERIMENTAL=enabled
-            docker buildx build --platform linux/amd64 --load -t arm-image .
-            docker run -e sftpUsername=sftpUsername -e sftpPassword=sftpPassword -e sftpServer=sftpServer -e transfertSpeedLimit=transfertSpeedLimit -e sftpInput=sftpInput --rm -v /tmp:/output --platform linux/amd64 -t -i nlhomme/docker-minestrator-backuper:$TAG
+            docker buildx build --platform linux/amd64 --load -t amd64-image .
+            docker run -e sftpUsername=sftpUsername -e sftpPassword=sftpPassword -e sftpServer=sftpServer -e transfertSpeedLimit=transfertSpeedLimit -e sftpInput=sftpInput --rm -v /tmp:/output --platform linux/amd64 -t -i amd64-image
 
   arm64-build:
     machine:
@@ -65,10 +64,9 @@ jobs:
       - run:
           name: Build and run arm64 image
           command: |
-            TAG=0.1.$CIRCLE_BUILD_NUM
             DOCKER_CLI_EXPERIMENTAL=enabled
             docker buildx build --platform linux/arm64 --load -t arm-image .
-            docker run -e sftpUsername=sftpUsername -e sftpPassword=sftpPassword -e sftpServer=sftpServer -e transfertSpeedLimit=transfertSpeedLimit -e sftpInput=sftpInput --rm -v /tmp:/output --platform linux/arm64 -t -i nlhomme/docker-minestrator-backuper:$TAG
+            docker run -e sftpUsername=sftpUsername -e sftpPassword=sftpPassword -e sftpServer=sftpServer -e transfertSpeedLimit=transfertSpeedLimit -e sftpInput=sftpInput --rm -v /tmp:/output --platform linux/arm64 -t -i arm-image
 
 workflows:
   version: 2
