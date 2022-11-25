@@ -51,6 +51,7 @@ jobs:
             docker buildx build --platform linux/amd64 --load -t amd64-image .
       - snyk/scan:
           docker-image-name: amd64-image
+          fail-on-issues: true
       - run:
           name: Run test for amd64 image
           command: |
@@ -68,10 +69,11 @@ jobs:
             docker buildx build --platform linux/arm64 --load -t arm64-image .
       - snyk/scan:
           docker-image-name: arm64-image
+          fail-on-issues: true
       - run:
           name: Run test for arm64 image
           command: |
-            docker run -e sftpUsername=$sftpUsername -e sftpPassword=$sftpPassword -e sftpServer=$sftpServer -e transfertSpeedLimit=$transfertSpeedLimit -e sftpInput=$sftpInput --rm -v /tmp:/output --platform linux/arm64 -t -i arm-image
+            docker run -e sftpUsername=$sftpUsername -e sftpPassword=$sftpPassword -e sftpServer=$sftpServer -e transfertSpeedLimit=$transfertSpeedLimit -e sftpInput=$sftpInput --rm -v /tmp:/output --platform linux/arm64 -t -i arm64-image
 
 workflows:
   version: 2
