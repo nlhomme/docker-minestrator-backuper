@@ -77,7 +77,7 @@ jobs:
 
 workflows:
   version: 2
-  build:
+  continuous-integration:
     jobs:
 #      - execute-yamllint
       - amd64-ci
