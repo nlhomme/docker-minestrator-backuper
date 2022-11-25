@@ -4,9 +4,9 @@
 version: 2.1
 
 
-# orbs:
+orbs:
 #   yamllint: orbss/yamllint@0.0.3
-
+  snyk: snyk/snyk@1.4.0
 
 commands:
   setup:
@@ -48,12 +48,9 @@ jobs:
           name: Build amd64 image
           command: |
             DOCKER_CLI_EXPERIMENTAL=enabled
-              docker buildx build --platform linux/amd64 .
-      - run:
-          name: Run amd64 image
-          command: |
-            DOCKER_CLI_EXPERIMENTAL=enabled
             docker buildx build --platform linux/amd64 --load -t amd64-image .
+      - snyk/scan:
+          docker-image-name: amd64-image
       - run:
           name: Run test for amd64 image
           command: |
@@ -69,6 +66,8 @@ jobs:
           command: |
             DOCKER_CLI_EXPERIMENTAL=enabled
             docker buildx build --platform linux/arm64 --load -t arm-image .
+      - snyk/scan:
+          docker-image-name: arm64-image
       - run:
           name: Run test for arm64 image
           command: |
