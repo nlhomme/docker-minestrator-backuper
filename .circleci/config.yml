@@ -65,7 +65,7 @@ jobs:
           name: Build arm64 image
           command: |
             DOCKER_CLI_EXPERIMENTAL=enabled
-            docker buildx build --platform linux/arm64 --load -t arm-image .
+            docker buildx build --platform linux/arm64 --load -t arm64-image .
       - snyk/scan:
           docker-image-name: arm64-image
       - run:
