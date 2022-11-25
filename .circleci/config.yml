@@ -39,7 +39,7 @@ jobs:
 #      - checkout
 #      - yamllint/execute
 
-  amd64-build:
+  amd64-ci:
     machine:
       image: 'ubuntu-2004:current'
     steps:
@@ -57,7 +57,7 @@ jobs:
           command: |
             docker run -e sftpUsername=$sftpUsername -e sftpPassword=$sftpPassword -e sftpServer=$sftpServer -e transfertSpeedLimit=$transfertSpeedLimit -e sftpInput=$sftpInput --rm -v /tmp:/output --platform linux/amd64 -t -i amd64-image
 
-  arm64-build:
+  arm64-ci:
     machine:
       image: 'ubuntu-2004:current'
     steps:
@@ -80,5 +80,5 @@ workflows:
   build:
     jobs:
 #      - execute-yamllint
-      - amd64-build
-      - arm64-build
+      - amd64-ci
+      - arm64-ci
