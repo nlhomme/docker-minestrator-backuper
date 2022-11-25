@@ -4,9 +4,9 @@
 version: 2.1
 
 
-# orbs:
+orbs:
 #   yamllint: orbss/yamllint@0.0.3
-
+  snyk: snyk/snyk@1.4.0
 
 commands:
   setup:
@@ -39,7 +39,7 @@ jobs:
 #      - checkout
 #      - yamllint/execute
 
-  amd64-build:
+  amd64-ci:
     machine:
       image: 'ubuntu-2004:current'
     steps:
@@ -48,18 +48,16 @@ jobs:
           name: Build amd64 image
           command: |
             DOCKER_CLI_EXPERIMENTAL=enabled
-              docker buildx build --platform linux/amd64 .
-      - run:
-          name: Run amd64 image
-          command: |
-            DOCKER_CLI_EXPERIMENTAL=enabled
             docker buildx build --platform linux/amd64 --load -t amd64-image .
+      - snyk/scan:
+          docker-image-name: amd64-image
+          fail-on-issues: true
       - run:
           name: Run test for amd64 image
           command: |
             docker run -e sftpUsername=$sftpUsername -e sftpPassword=$sftpPassword -e sftpServer=$sftpServer -e transfertSpeedLimit=$transfertSpeedLimit -e sftpInput=$sftpInput --rm -v /tmp:/output --platform linux/amd64 -t -i amd64-image
 
-  arm64-build:
+  arm64-ci:
     machine:
       image: 'ubuntu-2004:current'
     steps:
@@ -68,16 +66,19 @@ jobs:
           name: Build arm64 image
           command: |
             DOCKER_CLI_EXPERIMENTAL=enabled
-            docker buildx build --platform linux/arm64 --load -t arm-image .
+            docker buildx build --platform linux/arm64 --load -t arm64-image .
+      - snyk/scan:
+          docker-image-name: arm64-image
+          fail-on-issues: true
       - run:
           name: Run test for arm64 image
           command: |
-            docker run -e sftpUsername=$sftpUsername -e sftpPassword=$sftpPassword -e sftpServer=$sftpServer -e transfertSpeedLimit=$transfertSpeedLimit -e sftpInput=$sftpInput --rm -v /tmp:/output --platform linux/arm64 -t -i arm-image
+            docker run -e sftpUsername=$sftpUsername -e sftpPassword=$sftpPassword -e sftpServer=$sftpServer -e transfertSpeedLimit=$transfertSpeedLimit -e sftpInput=$sftpInput --rm -v /tmp:/output --platform linux/arm64 -t -i arm64-image
 
 workflows:
   version: 2
-  build:
+  continuous-integration:
     jobs:
 #      - execute-yamllint
-      - amd64-build
-      - arm64-build
+      - amd64-ci
+      - arm64-ci
