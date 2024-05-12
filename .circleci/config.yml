@@ -6,7 +6,7 @@ version: 2.1
 
 orbs:
 #   yamllint: orbss/yamllint@0.0.3
-  snyk: snyk/snyk@1.4.0
+  snyk: snyk/snyk@2.1.0
 
 commands:
   setup:
@@ -41,7 +41,7 @@ jobs:
 
   amd64-ci:
     machine:
-      image: 'ubuntu-2004:current'
+      image: 'ubuntu-2204:current'
     steps:
       - setup
       - run:
@@ -59,7 +59,7 @@ jobs:
 
   arm64-ci:
     machine:
-      image: 'ubuntu-2004:current'
+      image: 'ubuntu-2204:current'
     steps:
       - setup
       - run:
